@@ -3,6 +3,14 @@ const chats = require('./data/data')
 const app = express()
 require('dotenv').config()
 const PORT = process.env.PORT || 4000
+const cors = require('cors')
+
+app.use(
+    cors({//deep dive why credentials:true ?
+        origin: "http://localhost:3000",
+        credentials:true,            //access-control-allow-credentials:true
+    })
+)
 
 app.get('/api/chats',(req,res)=>{
     res.send(chats)
