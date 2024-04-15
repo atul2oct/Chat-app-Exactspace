@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema(
         email:{
             type:String,
             required:true,
+            unique:true,
         },
         password:{
             type:String,
@@ -17,7 +18,6 @@ const userSchema = mongoose.Schema(
         pic:{
             type:String,
             required:true,
-            default: "https://api.dicebear.com/8.x/avataaars/svg",
         },
     },
     { 

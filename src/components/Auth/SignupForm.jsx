@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux'
+import { signup } from '../../services/operation'
 
 const SignupForm = () => {
   const navigate = useNavigate()
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
   const [formData,setFormData] = useState({
     firstName:"",
@@ -55,7 +57,7 @@ const SignupForm = () => {
       }
     }
     
-    // dispatch(login(email,password,navigate))
+    dispatch(signup(formData,navigate))
 
     // Reset
     setFormData({
