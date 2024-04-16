@@ -68,7 +68,7 @@ export function signup(
     lastName,
     email,
     password,
-    confirmPassword,
+    image,
     navigate
 ) {
     return async(dispatch) => {
@@ -76,29 +76,33 @@ export function signup(
         dispatch(setLoading(true))
         let result = []
         try{
+            console.log('1')
             const response = await apiConnector('POST', SIGNUP_API, {
                 firstName,
                 lastName,
                 email,
                 password,
-                
+                image
             })
+            console.log('2')
             if(!response?.data?.success){
                 throw new Error("LOGIN API RESPONSE......",response)
             }
+            console.log('3')
+            
             console.log('res',response)
 
-            dispatch(setToken(response.data.token))
-            dispatch(setUser(response.data.data))
+            // dispatch(setToken(response.data.token))
+            // dispatch(setUser(response.data.data))
 
-            localStorage.setItem('token',JSON.stringify(response.data.token))
-            localStorage.setItem('user',JSON.stringify(response.data.data))
+            // localStorage.setItem('token',JSON.stringify(response.data.token))
+            // localStorage.setItem('user',JSON.stringify(response.data.data))
             
             result = response.data
-            toast.success('Login Successfully')
-            navigate("/")
+            toast.success('Sign up Successfully')
+            // navigate("/")
         }catch(error){
-            console.log("All Chats Data fetching API Error",error)
+            console.log("API Error in Sign up",error)
             toast.error(error.message)
             result = error.response?.data;
         }

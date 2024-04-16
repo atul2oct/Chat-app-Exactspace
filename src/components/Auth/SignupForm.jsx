@@ -22,7 +22,9 @@ const SignupForm = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImage(file);
+    if(file){
+      setImage(file);
+    }
   };
 
   const {firstName, lastName, email, password, confirmPassword} = formData
@@ -40,24 +42,9 @@ const SignupForm = () => {
       toast.error('Password mismatch')
       return
     }
-
-    const signupData=null;    
-
-    if (image) {
-      const imageData = new FormData();
-      imageData.append('image', image);
-      
-      signupData = {
-        ...formData,
-        imageData
-      }
-    }else{
-      signupData = {
-        ...formData,
-      }
-    }
+    console.log("Signup data:",firstName, lastName, email, password, image)
     
-    dispatch(signup(formData,navigate))
+    dispatch(signup(firstName, lastName, email, password, image,navigate))
 
     // Reset
     setFormData({

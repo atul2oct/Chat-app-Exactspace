@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 4000
 const cors = require('cors')
 const userRoutes = require('./routes/userRoutes')
 const {cloudinaryConnect} = require('./config/cloudinary')
+const fileupload = require('express-fileupload')
 
 
 app.use(express.json())
@@ -21,6 +22,12 @@ app.use(
 
 app.use('/api/user',userRoutes)
 
+app.use(
+    fileupload({
+        useTempFiles:true,
+        tempFileDir:"/tmp",
+    })
+)
 // cloudinary Connection
 cloudinaryConnect()
 

@@ -2,18 +2,20 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const { generateToken } = require('./generateToken')
 const user = require('../models/user')
+const { uploadImageToCloudinary } = require('../utils/imageUploader')
+require('dotenv').config()
 
 // signUp
 exports.signUp = async (req,res) => {
     try{
+
         const {
             firstName,
             lastName,
             email,
-            password,
-            image       
+            password,  
         } = req.body
-
+        
         // validate data
         if(!firstName || 
             !lastName || 
@@ -24,7 +26,7 @@ exports.signUp = async (req,res) => {
                     message:`All fields are required`
                 })
             }
-        
+
         // check user already exists or not
         const userExists = await User.findOne({email})
         if(userExists){
@@ -34,19 +36,33 @@ exports.signUp = async (req,res) => {
             })
         }
 
+        let pic
+        // problem not wokring
+        if(req?.files?.image){
+            console.log('req',req.files.image)
+            pic = await uploadImageToCloudinary(
+                req.files.image,
+                process.env.FOLDER_NAME,
+                1000,
+                1000,
+            )
+        }
+        
         // hash the pasword
         const hashPassword = await bcrypt.hash(password,10)
-
-        const profilePic= image ? image : `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
-        console.log(profilePic)
-
+        
+        const profilePic= pic ? pic.secure_url : `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
+        
         const user = await User.create({
             name:firstName+" "+lastName,
             email,
             password:hashPassword,
-            pic: image ? image : `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,//iss api se avtar banta hai atul yadav -> ay
+            pic: profilePic,//iss api se avtar banta hai atul yadav -> ay
         })
-        // return response
+        
+        console.log(user)
+
+        // return response        
         return res.status(200).json({
             success:true,
             user,
@@ -57,7 +73,8 @@ exports.signUp = async (req,res) => {
     }catch(error){
         return res.status(500).json({
             success:false,
-            message:`Something went wrong in sign up User connot be registered error: ${error}`
+            message:`Something went wrong in sign up User connot be registered error: ${error}`,
+            error
         })
     }
 }
