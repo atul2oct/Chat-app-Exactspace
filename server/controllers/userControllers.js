@@ -1,8 +1,6 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const { generateToken } = require('./generateToken')
-const user = require('../models/user')
-const { uploadImageToCloudinary } = require('../utils/imageUploader')
 require('dotenv').config()
 
 // signUp
@@ -35,29 +33,15 @@ exports.signUp = async (req,res) => {
                 message:`User already exists. Please sign in to continue.`
             })
         }
-
-        let pic
-        // problem not wokring
-        if(req?.files?.image){
-            console.log('req',req.files.image)
-            pic = await uploadImageToCloudinary(
-                req.files.image,
-                process.env.FOLDER_NAME,
-                1000,
-                1000,
-            )
-        }
         
         // hash the pasword
         const hashPassword = await bcrypt.hash(password,10)
-        
-        const profilePic= pic ? pic.secure_url : `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
         
         const user = await User.create({
             name:firstName+" "+lastName,
             email,
             password:hashPassword,
-            pic: profilePic,//iss api se avtar banta hai atul yadav -> ay
+            pic: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,//iss api se avtar banta hai atul yadav -> ay
         })
         
         console.log(user)
@@ -74,7 +58,7 @@ exports.signUp = async (req,res) => {
         return res.status(500).json({
             success:false,
             message:`Something went wrong in sign up User connot be registered error: ${error}`,
-            error
+            data:error
         })
     }
 }

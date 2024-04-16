@@ -18,14 +18,15 @@ const SignupForm = () => {
   })
   const [showPassword,setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if(file){
-      setImage(file);
-    }
-  };
+  // const handleImageChange = (e) => {
+  //   console.log(e.target.files)
+  //   const file = e.target.files[0];
+  //   if(file){
+  //     setImage(file);
+  //   }
+  // };
 
   const {firstName, lastName, email, password, confirmPassword} = formData
 
@@ -42,9 +43,15 @@ const SignupForm = () => {
       toast.error('Password mismatch')
       return
     }
-    console.log("Signup data:",firstName, lastName, email, password, image)
+
+    // console.log("image",image)
+    // const formData = new FormData();
+    // formData.append('image', image);
+    // console.log("image",formData.image)
     
-    dispatch(signup(firstName, lastName, email, password, image,navigate))
+    // console.log("Signup data:",firstName, lastName, email, password, image)
+    
+    dispatch(signup(firstName, lastName, email, password, navigate))
 
     // Reset
     setFormData({
@@ -54,7 +61,7 @@ const SignupForm = () => {
       password: "",
       confirmPassword: "",
     })
-    setImage(null)
+    // setImage(null)
 
   }
 
@@ -145,27 +152,11 @@ const SignupForm = () => {
           </span>
         </label>
       </div>
-
-      {/* upload Image */}
-      <label className='flex flex-col'>
-        <p className='text-richblack-5 mb-1 text-sm'>
-          Upload Profile Picture
-        </p>
-        <input
-          type="file" accept="image/*"
-          onChange={handleImageChange}
-        />
-      </label>
-      {image && (
-        <div>
-          <h2>Preview:</h2>
-          <img src={URL.createObjectURL(image)} alt="Preview" height='150px' width='150px' className='object-cover rounded-full'/>
-        </div>
-      )}
-
+      
       <button className='bg-yellow-50 rounded-lg py-2 mt-6 px-3 font-medium text-richblack-900' type='submit'>
         Create Account
       </button>
+
     </form>
   )
 }

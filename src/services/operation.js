@@ -51,7 +51,7 @@ export function login(email, password, navigate) {
 
             result = response.data
             toast.success('Login Successfully')
-            navigate("/")
+            navigate("/chats")
         }catch(error){
             console.log("All Chats Data fetching API Error",error)
             toast.error(error.message)
@@ -68,7 +68,7 @@ export function signup(
     lastName,
     email,
     password,
-    image,
+    formData,
     navigate
 ) {
     return async(dispatch) => {
@@ -76,19 +76,18 @@ export function signup(
         dispatch(setLoading(true))
         let result = []
         try{
-            console.log('1')
-            const response = await apiConnector('POST', SIGNUP_API, {
-                firstName,
-                lastName,
-                email,
-                password,
-                image
-            })
-            console.log('2')
+            const response = await apiConnector('POST', SIGNUP_API,
+                {
+                    firstName,
+                    lastName,
+                    email,
+                    password,
+                },
+            )
+            
             if(!response?.data?.success){
                 throw new Error("LOGIN API RESPONSE......",response)
             }
-            console.log('3')
             
             console.log('res',response)
 
@@ -101,6 +100,7 @@ export function signup(
             result = response.data
             toast.success('Sign up Successfully')
             // navigate("/")
+
         }catch(error){
             console.log("API Error in Sign up",error)
             toast.error(error.message)
@@ -109,5 +109,20 @@ export function signup(
         dispatch(setLoading(false))
         toast.dismiss(toastId)
         return result;
+    }    
+}
+
+export function logout(navigate) {
+    return async(dispatch) => {       
+
+        dispatch(setToken(null))
+        dispatch(setUser(null))
+
+        localStorage.removeItem('token')
+        localStorage.removeItem('user')
+        
+        toast.success('Logged Out')
+        navigate("/auth")
+        
     }    
 }
