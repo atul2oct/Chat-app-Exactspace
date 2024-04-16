@@ -5,4 +5,5 @@ export const endpoints = {
     DATA_API: BASE_URL + '/api/chats',
     SIGNUP_API: BASE_URL + "/api/user/signup",
     LOGIN_API: BASE_URL + "/api/user/login",
+    GETALLUSER_API: BASE_URL + "/api/user",
 }

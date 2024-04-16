@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
-const {signUp, login} = require('../controllers/userControllers')
+const {signUp, login, allUsers} = require('../controllers/userControllers')
+const { auth } = require('../middleware/Auth')
 
 // Route for user login
 router.post('/login',login)
@@ -9,8 +10,8 @@ router.post('/login',login)
 // Route for user signup
 router.post('/signup',signUp)
 
-// Route for send otp
-// router.post('/sendotp',sendOTP)
+// Route for get all user
+router.get('/', auth, allUsers)
 
 // Route for change password
 // router.post('/changepassword',auth,changePassword)

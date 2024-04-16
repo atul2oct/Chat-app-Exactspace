@@ -8,6 +8,7 @@ require('dotenv').config()
 const PORT = process.env.PORT || 4000
 const cors = require('cors')
 const userRoutes = require('./routes/userRoutes')
+const chatRoutes = require('./routes/chatRoutes')
 const {cloudinaryConnect} = require('./config/cloudinary')
 const fileupload = require('express-fileupload')
 
@@ -20,8 +21,6 @@ app.use(
     })
 )
 
-app.use('/api/user',userRoutes)
-
 app.use(
     fileupload({
         useTempFiles:true,
@@ -30,6 +29,9 @@ app.use(
 )
 // cloudinary Connection
 cloudinaryConnect()
+
+app.use('/api/user',userRoutes)
+app.use('/api/chat',chatRoutes)
 
 app.get('/api/chats',(req,res)=>{
     res.send(chats)

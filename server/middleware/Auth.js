@@ -5,7 +5,7 @@ require('dotenv').config()
 // auth
 exports.auth = async (req,res,next) => {
     try{
-        const token = req.body.token
+        const token = req.body.token || req.header("Authorization").replace("Bearer ","");
 
         // if token missing, then return response
         if(!token){

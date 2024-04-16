@@ -7,7 +7,8 @@ import { setUser } from "../slices/profileSlice";
 const {
     DATA_API,
     LOGIN_API,
-    SIGNUP_API
+    SIGNUP_API,
+    GETALLUSER_API
 } = endpoints
 
 export const fetchAllChatsData = async() => {
@@ -125,4 +126,27 @@ export function logout(navigate) {
         navigate("/auth")
         
     }    
+}
+
+export const getAllUsers = async (data, token) => {
+    let result = null
+    const toastId = toast.loading("Loading...")
+
+    try{
+        const response = await apiConnector("get", GETALLUSER_API, {
+            Authorization: `Bearer ${token}`,
+          }, params
+        )
+          console.log("CREATE COURSE API RESPONSE............", response)
+          if (!response?.data?.success) {
+            throw new Error("Could Not Add Course Details",response.data.message)
+          }
+          toast.success("Course Details Added Successfully")
+          result = response?.data?.data
+    }catch (error) {
+        console.log("CREATE COURSE API ERROR............", error)
+        toast.error(error.message)
+      }
+    toast.dismiss(toastId)
+    return result
 }

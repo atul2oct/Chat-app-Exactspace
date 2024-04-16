@@ -108,3 +108,26 @@ exports.login = async (req,res) => {
         })
     }
 }
+
+// get all users
+exports.allUsers = async (req,res) => {
+    try{
+        const keyword = req.query.search ? {
+            $or: [
+                {name: {$regex: req.query.search, $options: 'i'}},
+                {email: {$regex: req.query.search, $options: 'i'}}
+            ]
+        } : {}
+        const users = await User.find(keyword).find({_id: {$ne: req.user._id}})
+        return res.status(200).json({
+            success:true,
+            users,
+            message:"User signed in successfully"
+        })
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:`Something went wrong in fetching all User error: ${error}`
+        })
+    }
+}
